@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+        {% load staticfiles %}
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Diamond evaluation</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Diamond characteristics
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+
+
+                                        <div class="form-group">
+                                            <label>Carat: </label> {{carat}}
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Cut: </label> {{cut}}
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Color: </label> {{color}}
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Clarity: </label> {{clarity}}
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Predicted price: </label> ${{predicted_price}}
+
+                                        </div>
+                                        <a href="/index.html"><button class="btn btn-default">Go Back</button></a>
+
+                                </div>
+
+
+
+
+
+
+                                <!-- /.col-lg-6 (nested) -->
+                                <div class="col-lg-6">
+                                    <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-bar-chart-o fa-fw"></i> Color {{color}} clarity {{clarity}} - price curve
+                                    </div>
+
+                                    <!-- /.panel-heading -->
+                                    <div class="panel-body">
+
+                                        <!--<div id="myfirstchart" style="height: 250px;"></div>-->
+                                        <div id="chart_div" style="height: 250px;"></div>
+                                    </div>
+
+                                    <!-- /.panel-body -->
+                                </div>
+
+                                <!-- /.col-lg-6 (nested) -->
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+
+                        <!-- /.panel-body -->
+                    </div>
+                    <div class="panel-heading">
+                        Recommended deals for diamonds with color {{color}} and clarity {{clarity}}
+			<div>(Some of these links might be outdated)</div>
+                    </div>
+                    <div class="panel-body">
+                        {% for link in links %}
+                        <li><a href="http://www.bluenile.com/{{link.2}}">{{link.0}} Carat for ${{link.1}}</a></li>
+                        {% endfor %}
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+
+<script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'carat');
+        data.addColumn('number', 'price');
+
+        {% for data in graph_data %}
+        data.addRows([
+        [{{ data.0}}, {{data.1}}]
+        ]);
+        {% endfor %}
+
+        // Set chart options
+        var options = {'height':250,legend: 'none', hAxis: {title:'Carat'}, vAxis: {title:'Price $USD'}};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+{% endblock content %}
