@@ -3,6 +3,8 @@ import './App.css';
 import Table from './Table.js';
 import Form from './Form.js'
 
+// TODO: Check out this library to request url http URLs https://www.npmjs.com/package/urllib
+
 class App extends Component {
   state = {
     wanted_diamond: [],
